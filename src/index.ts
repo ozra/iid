@@ -4,34 +4,41 @@ import { v4 as Uuid } from "uuid"
 const base62 = createBase("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 const base16 = createBase("0123456789abcdef")
 
-const Iid: any = function () {
+// Generate a new uuid/v4, encoded in base62, zero-padded to always be 22 chars
+export const Iid: any = function () {
     const uuidBytes = Uuid(null, [])
-    return base62.encode(uuidBytes)
+    const uuid62 = base62.encode(uuidBytes)
+    return justifyRight(uuid62, 22)
 }
 
-Iid.fromIid62OrUuid16 = function (someId: string) {
+// Convenience function for when the input can be either kind
+Iid.fromIidOrUuid = function (someId: string) {
     // We do assume this is used in such a context that any string fitting the
     // length won't be something completely arbitrary
     if (someId.length === 22) {
         return someId
     } else if (someId.length === 36) {
-        return Iid.fromUuid16(someId)
+        return Iid.fromUuid(someId)
     } else {
         throw new Error(`Iid.fromIidOrUuid expects an Iid or a standard formatted Uuid base16, with the dashes, 36 characters long. The input "${someId}" isn't recognized.`)
     }
 }
 
-Iid.fromUuid16 = function (uuidBase16: string): string {
+// Convert a uuid/v4 in common base-16 format, with the dashes and all to an Iid
+Iid.fromUuid = function (uuidBase16: string): string {
     // We do assume this is used in such a context that any string fitting the
     // length won't be something completely arbitrary
     if (uuidBase16.length != 36) throw new Error(`Iid.fromUuid expects a standard formatted Uuid base16, with the dashes, 36 characters long. The input "${uuidBase16}" isn't recognized.`)
     // Our hex-digits-lut and decoder only handles lowercase
-    const washed = uuidBase16.replace("-", "").toLowerCase()
-    return base62.encode(base16.decode(washed))
+    const washed = uuidBase16.replace(/-/g, "").toLowerCase()
+    const uuid62 = base62.encode(base16.decode(washed))
+    return justifyRight(uuid62, 22)
 }
 
-Iid.toUuid16 = function (iid: string): string {
-    const uuid16 = base16.encode(base62.decode(iid))
+// Convert an Iid to a uuid/v4 in common base-16 format, with the dashes and all
+Iid.toUuid = function (iid: string): string {
+    const uuid16Raw = base16.encode(base62.decode(iid))
+    const uuid16 = justifyRight(uuid16Raw, 32)
     const part = (start: number, stop: number) => { return uuid16.substring(start, stop) }
     const specFormattedUuid16 =
         part(0, 8) + "-" +
@@ -40,6 +47,20 @@ Iid.toUuid16 = function (iid: string): string {
         part(16, 20) + "-" +
         part(20, 32)
     return specFormattedUuid16
+}
+
+Iid.base16 = base16
+
+Iid.base62 = base62
+
+function justifyRight(text: string, width: number, padChar = "0") {
+    const delta = width - text.length
+    // console.log("delta", delta, text.length, width, text)
+    if (delta == -1) {
+        return text.slice(1)
+    } else {
+        return padChar.repeat(delta) + text
+    }
 }
 
 function createBase(baseDigits_: string) {
@@ -54,45 +75,44 @@ function createBase(baseDigits_: string) {
         digitsLut_[digit] = i
     }
 
-    function encode(source: Array<number>): string {
-        if (source.length === 0) throw new Error("Empty input")
+    function encode(byteArray: Array<number>): string {
+        if (byteArray.length === 0) throw new Error("Empty input")
 
-        const digits = [0]
-        for (let i = 0; i < source.length; ++i) {
-            let carry = source[i]
-            for (let j = 0; j < digits.length; ++j) {
-                carry += digits[j] << 8
-                digits[j] = carry % base_
+        const dest = [0]
+        for (let i = 0; i < byteArray.length; ++i) {
+            let carry = byteArray[i]
+            for (let j = 0; j < dest.length; ++j) {
+                carry += dest[j] << 8
+                dest[j] = carry % base_
                 carry = (carry / base_) | 0
             }
 
             while (carry > 0) {
-                digits.push(carry % base_)
+                dest.push(carry % base_)
                 carry = (carry / base_) | 0
             }
         }
 
         let output = ""
-
         // deal with leading zeros
-        for (let i = 0; source[i] === 0 && i < source.length - 1; ++i) {
+        for (let i = 0; byteArray[i] === 0 && i < byteArray.length - 1; ++i) {
             output += padDigit_
         }
         // convert digits to a string
-        for (let i = digits.length - 1; i >= 0; --i) {
-            output += digits[digits[i]]
+        for (let i = dest.length - 1; i >= 0; --i) {
+            output += baseDigits_[dest[i]]
         }
         return output
     }
 
-    function decode(input: string): Array<number> {
-        if (typeof input !== 'string') throw new TypeError('Expected String')
-        if (input.length === 0) throw new Error("Empty input")
+    function decode(inputString: string): Array<number> {
+        if (typeof inputString !== 'string') throw new TypeError('Expected String')
+        if (inputString.length === 0) throw new Error("Empty input")
 
         const bytes = [0]
-        for (let i = 0; i < input.length; ++i) {
-            const value = digitsLut_[input.charAt(i)]
-            if (value === undefined) throw new Error(`Non-base${base_} digit`)
+        for (let i = 0; i < inputString.length; ++i) {
+            const value = digitsLut_[inputString.charAt(i)]
+            if (value === undefined) throw new Error(`Non-base${base_} digit: "${inputString.charAt(i)}"`)
             let carry = value
 
             for (let j = 0; j < bytes.length; ++j) {
@@ -108,7 +128,7 @@ function createBase(baseDigits_: string) {
         }
 
         // deal with leading zeros
-        for (let i = 0; input[i] === padDigit_ && i < input.length - 1; ++i) {
+        for (let i = 0; inputString[i] === padDigit_ && i < inputString.length - 1; ++i) {
             bytes.push(0)
         }
 
@@ -119,5 +139,3 @@ function createBase(baseDigits_: string) {
         decode: decode,
     }
 }
-
-export default Iid

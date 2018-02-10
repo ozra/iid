@@ -4,7 +4,7 @@
   "description": "Internet Id (base62-encoded uuid/v4)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/iid.test.js"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,7 @@
     "typescript": "^2.7.1"
   },
   "dependencies": {
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "uuid62": "^1.0.0"
   }
 }

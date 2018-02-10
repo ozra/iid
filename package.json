@@ -28,5 +28,12 @@
   "bugs": {
     "url": "https://github.com/ozra/iid/issues"
   },
-  "homepage": "https://github.com/ozra/iid#readme"
+  "homepage": "https://github.com/ozra/iid#readme",
+  "devDependencies": {
+    "@types/uuid": "^3.4.3",
+    "typescript": "^2.7.1"
+  },
+  "dependencies": {
+    "uuid": "^3.2.1"
+  }
 }

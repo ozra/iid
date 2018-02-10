@@ -1,6 +1,6 @@
-# Iid - Simply Internet ID #
+# Iid - Internet ID #
 
-## Simply uuid/v4, base62-encoded, zero-justified to 22 chars ##
+What's that? Simply uuid/v4, base62-encoded, zero-justified to 22 chars. It looks like "1eCH6Km2kWjIviA5l6q9VN" and contains only latin letters and numbers. You probably know all about it already.
 
 Looking around, the packages I found seemed shady. Or maybe it was NIH.
 
@@ -20,6 +20,7 @@ Looking around, the packages I found seemed shady. Or maybe it was NIH.
 ## Example ##
 
 ```javascript
+const {Iid} = require("iid") // Or `import {Iid} from "iid"` if using esmod
 say = console.log
 
 const iid = Iid()

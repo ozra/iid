@@ -1,0 +1,32 @@
+{
+  "name": "iid",
+  "version": "0.9.0",
+  "description": "Internet Id (base62-encoded uuid/v4)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ozra/iid.git"
+  },
+  "keywords": [
+    "uuid",
+    "v4",
+    "internet",
+    "id",
+    "base62",
+    "pretty",
+    "short",
+    "url",
+    "command",
+    "line",
+    "friendly"
+  ],
+  "author": "Oscar Campbell",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ozra/iid/issues"
+  },
+  "homepage": "https://github.com/ozra/iid#readme"
+}

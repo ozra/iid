@@ -4,15 +4,16 @@ import { v4 as Uuid } from "uuid"
 const base62 = createBase("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 const base16 = createBase("0123456789abcdef")
 
-// Generate a new uuid/v4, encoded in base62, zero-padded to always be 22 chars
+/// Generate a new uuid/v4, encoded in base62, zero-padded to always be 22 chars
 export const Iid: any = function () {
     const uuidBytes = Uuid(null, [])
     const uuid62 = base62.encode(uuidBytes)
     return justifyRight(uuid62, 22)
 }
 
-// Convenience function for when the input can be either kind
-Iid.fromIidOrUuid = function (someId: string) {
+/// Convenience function for when the input can be either kind
+// *TODO* should handle array of bytes too
+Iid.from = function (someId: string) {
     // We do assume this is used in such a context that any string fitting the
     // length won't be something completely arbitrary
     if (someId.length === 22) {
@@ -24,7 +25,17 @@ Iid.fromIidOrUuid = function (someId: string) {
     }
 }
 
-// Convert a uuid/v4 in common base-16 format, with the dashes and all to an Iid
+/// Convenience function for when input can be either format or undefined/null,
+/// in which case it will create a new Iid
+Iid.fromOrMake = function (maybeSomeId: string | null | undefined) {
+    if (maybeSomeId) {
+        return Iid.from(maybeSomeId)
+    } else {
+        return Iid()
+    }
+}
+
+/// Convert a uuid/v4 in common base-16 format, with the dashes and all to an Iid
 Iid.fromUuid = function (uuidBase16: string): string {
     // We do assume this is used in such a context that any string fitting the
     // length won't be something completely arbitrary
@@ -35,7 +46,7 @@ Iid.fromUuid = function (uuidBase16: string): string {
     return justifyRight(uuid62, 22)
 }
 
-// Convert an Iid to a uuid/v4 in common base-16 format, with the dashes and all
+/// Convert an Iid to a uuid/v4 in common base-16 format, with the dashes and all
 Iid.toUuid = function (iid: string): string {
     const uuid16Raw = base16.encode(base62.decode(iid))
     const uuid16 = justifyRight(uuid16Raw, 32)
@@ -52,6 +63,10 @@ Iid.toUuid = function (iid: string): string {
 Iid.base16 = base16
 
 Iid.base62 = base62
+
+Iid.createBase = createBase
+
+Iid.Uuid = Uuid
 
 function justifyRight(text: string, width: number, padChar = "0") {
     const delta = width - text.length

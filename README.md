@@ -10,7 +10,7 @@ Looking around, the packages I found seemed shady. Or maybe it was NIH.
 - Clean and simple for APIs, micro-service messaging, apps — you know; internet-stuff
 - Generate a 128-bit Uuid/v4, encoded as a 22-char base-62 string: "Iid"
 - Since it's considered practically and reasonably collision-free (unless using a sucky PRNG like WinAPI), it can be used to create unique ID's in a decentralized fashion. Good for internet-stuff and mobile.
-- It's not as grotesquely in your face as "289b5d90-4f9b-4095-916b-d82451cf9f53" (uuid/v4 canonical hexa-decimal string representation)
+- It's not as grotesquely in your face as "289b5d90-4f9b-4095-916b-d82451cf9f53" (uuid/v4 canonical hexadecimal string representation)
 - Convert to and from Uuid/v4 canonical 36-char format for interfacing with databases, external APIs, etc
 - Needless to say, loss-less conversion for all 128-bits, whereof 122 bits are entropy, as per specs.
 

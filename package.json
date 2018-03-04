@@ -1,6 +1,6 @@
 {
   "name": "iid",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Internet Id (base62-encoded uuid/v4)",
   "main": "dist-cjs/index.js",
   "module": "dist-esmod/index.js",

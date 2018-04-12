@@ -1,12 +1,12 @@
 {
-  "name": "iid",
-  "version": "0.9.4",
-  "description": "Internet Id (base62-encoded uuid/v4)",
+  "name": "qid",
+  "version": "0.9.7",
+  "description": "The Qid. Quintessential Internet Id (base62-encoded uuid/v4)",
   "main": "dist-cjs/index.js",
   "module": "dist-esmod/index.js",
-  "browser": "dist-browser/index.js",
+  "browser": "dist-esmod/index.js",
   "scripts": {
-    "test": "node test/iid.test.js",
+    "test": "node test/qid.test.js",
     "prepublish": "make"
   },
   "repository": {

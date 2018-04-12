@@ -8,20 +8,21 @@ test:
 	node test/iid.test.js
 
 clean:
-	rm -rf dist-cjs dist-esmod dist-browser
+	rm -rf dist-cjs dist-esmod
 
-build: node_modules
-	mkdir -p dist-cjs
+build: node_modules build-files
+
+build-files: \
+	dist-cjs/index.js \
+	dist-esmod/index.js \
+
+dist-cjs/index.js: src/index.ts
 	$(TSC) $(TS_FLAGS) src/index.ts --module commonjs --outDir dist-cjs
 
-	mkdir -p dist-esmod
+dist-esmod/index.js: src/index.ts
 	$(TSC) $(TS_FLAGS) src/index.ts --module ESNext --outDir dist-esmod
-
-	mkdir -p dist-browser
-	$(TSC) $(TS_FLAGS) src/index.ts --module ESNext --outDir dist-browser
 
 node_modules:
 	npm install
 
 .PHONY: all build clean test
-

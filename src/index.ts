@@ -1,11 +1,12 @@
 'use strict'
-import { v4 as Uuid } from "uuid"
+import { v4 } from "uuid"
+const Uuid = v4
 
 const base62 = createBase("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 const base16 = createBase("0123456789abcdef")
 
 /// Generate a new uuid/v4, encoded in base62, zero-padded to always be 22 chars
-export const Iid: any = function () {
+export const Qid: any = function () {
     const uuidBytes = Uuid(null, [])
     const uuid62 = base62.encode(uuidBytes)
     return justifyRight(uuid62, 22)
@@ -13,41 +14,41 @@ export const Iid: any = function () {
 
 /// Convenience function for when the input can be either kind
 // *TODO* should handle array of bytes too
-Iid.from = function (someId: string) {
+Qid.from = function (someId: string) {
     // We do assume this is used in such a context that any string fitting the
     // length won't be something completely arbitrary
     if (someId.length === 22) {
         return someId
     } else if (someId.length === 36) {
-        return Iid.fromUuid(someId)
+        return Qid.fromUuid(someId)
     } else {
-        throw new Error(`Iid.fromIidOrUuid expects an Iid or a standard formatted Uuid base16, with the dashes, 36 characters long. The input "${someId}" isn't recognized.`)
+        throw new Error(`Qid.fromQidOrUuid expects an Qid or a standard formatted Uuid base16, with the dashes, 36 characters long. The input "${someId}" isn't recognized.`)
     }
 }
 
 /// Convenience function for when input can be either format or undefined/null,
-/// in which case it will create a new Iid
-Iid.fromOrMake = function (maybeSomeId: string | null | undefined) {
+/// in which case it will create a new Qid
+Qid.fromOrMake = function (maybeSomeId: string | null | undefined) {
     if (maybeSomeId) {
-        return Iid.from(maybeSomeId)
+        return Qid.from(maybeSomeId)
     } else {
-        return Iid()
+        return Qid()
     }
 }
 
-/// Convert a uuid/v4 in common base-16 format, with the dashes and all to an Iid
-Iid.fromUuid = function (uuidBase16: string): string {
+/// Convert a uuid/v4 in common base-16 format, with the dashes and all to an Qid
+Qid.fromUuid = function (uuidBase16: string): string {
     // We do assume this is used in such a context that any string fitting the
     // length won't be something completely arbitrary
-    if (uuidBase16.length != 36) throw new Error(`Iid.fromUuid expects a standard formatted Uuid base16, with the dashes, 36 characters long. The input "${uuidBase16}" isn't recognized.`)
+    if (uuidBase16.length != 36) throw new Error(`Qid.fromUuid expects a standard formatted Uuid base16, with the dashes, 36 characters long. The input "${uuidBase16}" isn't recognized.`)
     // Our hex-digits-lut and decoder only handles lowercase
     const washed = uuidBase16.replace(/-/g, "").toLowerCase()
     const uuid62 = base62.encode(base16.decode(washed))
     return justifyRight(uuid62, 22)
 }
 
-/// Convert an Iid to a uuid/v4 in common base-16 format, with the dashes and all
-Iid.toUuid = function (iid: string): string {
+/// Convert an Qid to a uuid/v4 in common base-16 format, with the dashes and all
+Qid.toUuid = function (iid: string): string {
     const uuid16Raw = base16.encode(base62.decode(iid))
     const uuid16 = justifyRight(uuid16Raw, 32)
     const part = (start: number, stop: number) => { return uuid16.substring(start, stop) }
@@ -60,13 +61,13 @@ Iid.toUuid = function (iid: string): string {
     return specFormattedUuid16
 }
 
-Iid.base16 = base16
+Qid.base16 = base16
 
-Iid.base62 = base62
+Qid.base62 = base62
 
-Iid.createBase = createBase
+Qid.createBase = createBase
 
-Iid.Uuid = Uuid
+Qid.Uuid = Uuid
 
 function justifyRight(text: string, width: number, padChar = "0") {
     const delta = width - text.length
@@ -78,7 +79,9 @@ function justifyRight(text: string, width: number, padChar = "0") {
     }
 }
 
-function createBase(baseDigits_: string) {
+// For some reason typescript module resolvment fucks up unless we export more
+// than one item(!?)
+export function createBase(baseDigits_: string) {
     const digitsLut_ = {}
     const base_ = baseDigits_.length
     const padDigit_ = baseDigits_.charAt(0)

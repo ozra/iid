@@ -1,19 +1,24 @@
 'use strict'
-import { v4 } from "uuid"
-const Uuid = v4
+import * as v4 from "uuid/v4"
+const Uuid = v4 // these steps are to satisfy Ts AND Rollup
 
 const base62 = createBase("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 const base16 = createBase("0123456789abcdef")
 
+// TODO: add this, and casts where needed then
+// export interface Qid extends String {
+//     _QidBrand: string
+// }
+
 /// Generate a new uuid/v4, encoded in base62, zero-padded to always be 22 chars
-export const Qid: any = function () {
+export const Qid: any = function (): string {
     const uuidBytes = Uuid(null, [])
     const uuid62 = base62.encode(uuidBytes)
     return justifyRight(uuid62, 22)
 }
 
 /// Convenience function for when the input can be either kind
-// *TODO* should handle array of bytes too
+// TODO: should handle Qid, Buffer and Array<Byte> also
 Qid.from = function (someId: string) {
     // We do assume this is used in such a context that any string fitting the
     // length won't be something completely arbitrary

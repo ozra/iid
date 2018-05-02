@@ -1,6 +1,6 @@
 NODEJS := node
 TSC := node_modules/typescript/bin/tsc
-TS_FLAGS := --alwaysStrict --moduleResolution node --strictNullChecks --declaration --inlineSourceMap --pretty --target ES2017
+TS_FLAGS := --alwaysStrict --moduleResolution node --strictNullChecks --declaration  --pretty --target ES2017
 
 all: build
 
@@ -13,8 +13,8 @@ clean:
 build: node_modules build-files
 
 build-files: \
-	dist-cjs/index.js \
 	dist-esmod/index.js \
+	dist-cjs/index.js \
 
 dist-cjs/index.js: src/index.ts
 	$(TSC) $(TS_FLAGS) src/index.ts --module commonjs --outDir dist-cjs

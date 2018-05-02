@@ -1,6 +1,6 @@
 'use strict'
-import { v4 } from "uuid"
-const Uuid = v4
+import * as v4 from "uuid/v4"
+const Uuid = v4 // these steps are to satisfy Ts AND Rollup
 
 const base62 = createBase("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 const base16 = createBase("0123456789abcdef")

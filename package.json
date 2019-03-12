@@ -1,6 +1,6 @@
 {
   "name": "qid",
-  "version": "0.9.8",
+  "version": "0.9.11",
   "description": "The Qid. Quintessential Internet Id (base62-encoded uuid/v4)",
   "main": "dist/index.js",
   "scripts": {
@@ -17,6 +17,10 @@
     "internet",
     "id",
     "base62",
+    "base56",
+    "safe glyphs",
+    "mixup",
+    "geo encoding",
     "pretty",
     "short",
     "url",

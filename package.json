@@ -2,9 +2,7 @@
   "name": "qid",
   "version": "0.9.8",
   "description": "The Qid. Quintessential Internet Id (base62-encoded uuid/v4)",
-  "main": "dist-cjs/index.js",
-  "module": "dist-esmod/index.js",
-  "browser": "dist-esmod/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "node test/qid.test.js",
     "prepublish": "make"
@@ -33,8 +31,7 @@
   },
   "homepage": "https://github.com/ozra/iid#readme",
   "devDependencies": {
-    "@types/uuid": "^3.4.4",
-    "typescript": "^3.0.3"
+    "typescript": "^3.3.3"
   },
   "dependencies": {
     "uuid": "^3.3.2"

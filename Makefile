@@ -4,23 +4,22 @@ TS_FLAGS := --alwaysStrict --moduleResolution node --strictNullChecks --declarat
 
 all: build
 
-test:
+test: build
 	node test/iid.test.js
 
 clean:
-	rm -rf dist-cjs dist-esmod
+	rm -rf dist*
 
 build: node_modules build-files
 
 build-files: \
-	dist-esmod/index.js \
-	dist-cjs/index.js \
+	dist/index.js
 
-dist-cjs/index.js: src/index.ts
-	$(TSC) $(TS_FLAGS) src/index.ts --module commonjs --outDir dist-cjs
+dist/index.js: src/index.ts
+	$(TSC) $(TS_FLAGS) src/index.ts --module commonjs --outDir dist
 
-dist-esmod/index.js: src/index.ts
-	$(TSC) $(TS_FLAGS) src/index.ts --module ESNext --outDir dist-esmod
+# dist-esmod/index.js: src/index.ts
+# 	$(TSC) $(TS_FLAGS) src/index.ts --module ESNext --outDir dist-esmod
 
 node_modules:
 	npm install

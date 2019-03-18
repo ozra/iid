@@ -25,7 +25,7 @@ while (count-- != 0) {
         }
     })()
 
-    ;("base52.*")
+    ;("base62.*")
     ;(() => {
         let n = Math.round(Math.random() * Number.MAX_SAFE_INTEGER)
         let enc = Qid.base62.encode(n)
@@ -43,17 +43,17 @@ while (count-- != 0) {
     })()
 }
 
-;("test_n")
-function test_n(n) {
-    say(
-        Qid.base56.encode(n),
-        Qid.base62.encode(n),
-        n,
-        Qid.base56.__byte_array_to_int53__(
-            Qid.base56.__int53_to_byte_array__(n)
-        ) - n
-    )
-}
+// ;("test_n")
+// function test_n(n) {
+//     say(
+//         Qid.base56.encode(n),
+//         Qid.base62.encode(n),
+//         n,
+//         Qid.base56.__byte_array_to_int53__(
+//             Qid.base56.__int53_to_byte_array__(n)
+//         ) - n
+//     )
+// }
 
 test_n(0)
 test_n(1)
@@ -81,17 +81,17 @@ try {
 
 say()
 
-const make_token = Qid.create_serial_token_source(23)
-
-for (let i = 0; i < 20; ++i) {
-    const out = []
-    for (let j = 0; j < 3; ++j) {
-        out.push(make_token())
-    }
-    say(out)
-
-    make_token.reseed()
-}
+// const make_token = Qid.create_serial_token_source(23)
+//
+// for (let i = 0; i < 20; ++i) {
+//     const out = []
+//     for (let j = 0; j < 3; ++j) {
+//         out.push(make_token())
+//     }
+//     say(out)
+//
+//     make_token.reseed()
+// }
 
 say()
 say("All seems good and dandy")

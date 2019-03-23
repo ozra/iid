@@ -1,0 +1,10 @@
+#!/usr/bin/node
+const { Qid, base62 } = require("../")
+const conv_val = process.argv.slice(2).pop()
+
+if (conv_val) {
+    console.log(base62.encode(+conv_val))
+
+} else {
+    console.log(Qid())
+}

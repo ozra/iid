@@ -5,7 +5,7 @@ TS_FLAGS := --alwaysStrict --moduleResolution node --strictNullChecks --declarat
 all: build
 
 test: build
-	node test/iid.test.js
+	node test/qid.test.js
 
 clean:
 	rm -rf dist*

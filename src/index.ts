@@ -95,7 +95,7 @@ function to_uuid(qid_b62: string): string {
     const part = (start: number, stop: number) => {
         return uuid16.substring(start, stop)
     }
-    const specFormattedUuid16 =
+    const spec_formatted_uuid_v4_b16 =
         part(0, 8) +
         "-" +
         part(8, 12) +
@@ -105,17 +105,20 @@ function to_uuid(qid_b62: string): string {
         part(16, 20) +
         "-" +
         part(20, 32)
-    return specFormattedUuid16
+
+    return spec_formatted_uuid_v4_b16
 }
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // //
-function justify_right(text: string, width: number, pad_char = "0") {
+function justify_right(text: string, width: number, zero_digit = "0") {
     const delta = width - text.length
-    // console.log("delta", delta, text.length, width, text)
-    if (delta == -1) {
-        return text.slice(1)
+
+    // I've seen multiple zeros generating a -2 surplus — only happens once
+    // in a blue moon. Now it's deterministic.
+    if (delta < 0) {
+        return text.slice(-delta)
     } else {
-        return pad_char.repeat(delta) + text
+        return zero_digit.repeat(delta) + text
     }
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "qid",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "description": "The Qid. Quintessential Internet Id (base62-encoded uuid/v4)",
   "main": "dist/index.js",
   "scripts": {
@@ -18,15 +18,26 @@
     "id",
     "base62",
     "base56",
-    "safe glyphs",
+    "safe",
+    "glyphs",
     "mixup",
     "geo encoding",
     "pretty",
     "short",
+    "efficient",
     "url",
+    "messaging",
     "command",
     "line",
-    "friendly"
+    "friendly",
+    "wire",
+    "protocol",
+    "topic",
+    "slug",
+    "encode",
+    "number",
+    "compress",
+    "compact"
   ],
   "author": "Oscar Campbell",
   "license": "ISC",
@@ -35,7 +46,7 @@
   },
   "homepage": "https://github.com/ozra/iid#readme",
   "devDependencies": {
-    "typescript": "^3.3.3"
+    "typescript": "^3.3.4000"
   },
   "dependencies": {
     "uuid": "^3.3.2"
